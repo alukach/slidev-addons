@@ -1,0 +1,36 @@
+{
+  "name": "@alukach/slidev-addon-hotkeys",
+  "version": "0.1.0",
+  "description": "Give any Slidev slide a keyboard shortcut that jumps to it, via frontmatter.",
+  "keywords": [
+    "slidev-addon",
+    "slidev"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alukach/slidev-addons.git",
+    "directory": "packages/hotkeys"
+  },
+  "homepage": "https://alukach.github.io/slidev-addons/hotkeys/",
+  "type": "module",
+  "files": [
+    "setup"
+  ],
+  "engines": {
+    "slidev": ">=53.0.0"
+  },
+  "scripts": {
+    "dev": "slidev",
+    "build": "slidev build --base ${BASE:-/}hotkeys/ --out ../../site/dist/hotkeys"
+  },
+  "devDependencies": {
+    "@slidev/cli": "catalog:",
+    "@slidev/theme-default": "catalog:",
+    "vue": "catalog:",
+    "esbuild": "catalog:"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

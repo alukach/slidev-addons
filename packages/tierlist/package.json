@@ -1,0 +1,41 @@
+{
+  "name": "@alukach/slidev-addon-tierlist",
+  "version": "0.1.0",
+  "description": "A drag-and-drop S–F tier list for Slidev, linking to detail slides with tier badges.",
+  "keywords": [
+    "slidev-addon",
+    "slidev"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alukach/slidev-addons.git",
+    "directory": "packages/tierlist"
+  },
+  "homepage": "https://alukach.github.io/slidev-addons/tierlist/",
+  "type": "module",
+  "files": [
+    "components",
+    "layouts",
+    "store.ts"
+  ],
+  "engines": {
+    "slidev": ">=53.0.0"
+  },
+  "dependencies": {
+    "vuedraggable": "^4.1.0"
+  },
+  "scripts": {
+    "dev": "slidev",
+    "build": "slidev build --base ${BASE:-/}tierlist/ --out ../../site/dist/tierlist"
+  },
+  "devDependencies": {
+    "@slidev/cli": "catalog:",
+    "@slidev/theme-default": "catalog:",
+    "vue": "catalog:",
+    "esbuild": "catalog:"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

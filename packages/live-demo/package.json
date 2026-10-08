@@ -1,0 +1,36 @@
+{
+  "name": "@alukach/slidev-addon-live-demo",
+  "version": "0.1.0",
+  "description": "Embed live web apps in Slidev slides, with video fallback, zoom, crop, and multi-demo reels.",
+  "keywords": [
+    "slidev-addon",
+    "slidev"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alukach/slidev-addons.git",
+    "directory": "packages/live-demo"
+  },
+  "homepage": "https://alukach.github.io/slidev-addons/live-demo/",
+  "type": "module",
+  "files": [
+    "components"
+  ],
+  "engines": {
+    "slidev": ">=53.0.0"
+  },
+  "scripts": {
+    "dev": "slidev",
+    "build": "slidev build --base ${BASE:-/}live-demo/ --out ../../site/dist/live-demo"
+  },
+  "devDependencies": {
+    "@slidev/cli": "catalog:",
+    "@slidev/theme-default": "catalog:",
+    "vue": "catalog:",
+    "esbuild": "catalog:"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

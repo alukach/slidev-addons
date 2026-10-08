@@ -1,0 +1,38 @@
+{
+  "name": "@alukach/slidev-addon-laser",
+  "version": "0.1.0",
+  "description": "A fading laser-pointer trail for Slidev, mirrored between presenter and audience.",
+  "keywords": [
+    "slidev-addon",
+    "slidev"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alukach/slidev-addons.git",
+    "directory": "packages/laser"
+  },
+  "homepage": "https://alukach.github.io/slidev-addons/laser/",
+  "type": "module",
+  "files": [
+    "laser.ts",
+    "global-top.vue",
+    "custom-nav-controls.vue"
+  ],
+  "engines": {
+    "slidev": ">=53.0.0"
+  },
+  "scripts": {
+    "dev": "slidev",
+    "build": "slidev build --base ${BASE:-/}laser/ --out ../../site/dist/laser"
+  },
+  "devDependencies": {
+    "@slidev/cli": "catalog:",
+    "@slidev/theme-default": "catalog:",
+    "vue": "catalog:",
+    "esbuild": "catalog:"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

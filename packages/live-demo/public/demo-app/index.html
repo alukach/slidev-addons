@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stand-in App</title>
+<style>
+  :root { --bg:#f7f7f8; --fg:#18181b; --card:#fff; --line:#e4e4e7; --accent:#2563eb; }
+  .dark { --bg:#18181b; --fg:#f4f4f5; --card:#27272a; --line:#3f3f46; --accent:#60a5fa; }
+  * { box-sizing: border-box; }
+  body { margin:0; font:14px/1.4 system-ui, sans-serif; background:var(--bg); color:var(--fg); }
+  header { display:flex; gap:8px; align-items:center; padding:10px 14px; border-bottom:1px solid var(--line); background:var(--card); }
+  header b { flex:1; }
+  input { padding:6px 10px; border:1px solid var(--line); border-radius:6px; background:var(--bg); color:var(--fg); width:220px; }
+  button { padding:6px 10px; border:1px solid var(--line); border-radius:6px; background:var(--bg); color:var(--fg); cursor:pointer; }
+  main { display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:14px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:12px; }
+  .map { height:220px; border-radius:6px; background:
+    repeating-linear-gradient(0deg, transparent 0 39px, var(--line) 39px 40px),
+    repeating-linear-gradient(90deg, transparent 0 39px, var(--line) 39px 40px),
+    radial-gradient(circle at 35% 45%, #86efac55 0 60px, transparent 61px),
+    radial-gradient(circle at 70% 60%, #93c5fd66 0 80px, transparent 81px); position:relative; }
+  .pin { position:absolute; width:12px; height:12px; border-radius:50%; background:var(--accent); border:2px solid #fff; }
+  ul { margin:0; padding-left:18px; } li.hide { display:none; }
+  .hl { outline:3px solid var(--accent); outline-offset:3px; }
+  .status { font-size:12px; opacity:.7; }
+</style>
+</head>
+<body>
+<header>
+  <b>🛰️ Stand-in App</b>
+  <input id="q" placeholder="Search sites…" data-f="search">
+  <button id="dark" data-f="dark-mode">🌙</button>
+  <button data-f="export" onclick="exportCsv()">Export CSV</button>
+  <button data-f="auth">Sign in</button>
+</header>
+<main>
+  <div class="card" data-f="map-tiles">
+    <div class="map" id="map"></div>
+    <div class="status">Basemap: PMTiles (stand-in)</div>
+  </div>
+  <div class="card">
+    <ul id="list"></ul>
+    <p class="status" data-f="offline-sync" id="sync">● Synced</p>
+  </div>
+</main>
+<script>
+  const sites = ['Nelson','Castlegar','Rossland','Trail','Kaslo','Nakusp','Salmo','Creston'];
+  const list = document.getElementById('list'), map = document.getElementById('map');
+  sites.forEach((s, i) => {
+    const li = document.createElement('li'); li.textContent = s; list.append(li);
+    const p = document.createElement('span'); p.className = 'pin';
+    p.style.left = (10 + (i * 37) % 80) + '%'; p.style.top = (15 + (i * 53) % 70) + '%'; map.append(p);
+  });
+  document.getElementById('q').oninput = e => {
+    const v = e.target.value.toLowerCase();
+    [...list.children].forEach(li => li.classList.toggle('hide', !li.textContent.toLowerCase().includes(v)));
+  };
+  document.getElementById('dark').onclick = () => document.documentElement.classList.toggle('dark');
+  function exportCsv() {
+    const blob = new Blob(['site\n' + sites.join('\n')], { type: 'text/csv' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'sites.csv'; a.click();
+  }
+  const sync = document.getElementById('sync');
+  addEventListener('offline', () => sync.textContent = '○ Offline: changes queued');
+  addEventListener('online', () => sync.textContent = '● Synced');
+  // ?feature=<id> highlights the relevant UI, so each concept slide can deep-link.
+  const f = new URLSearchParams(location.search).get('feature');
+  if (f) document.querySelectorAll(`[data-f="${f}"]`).forEach(el => el.classList.add('hl'));
+</script>
+</body>
+</html>
