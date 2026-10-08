@@ -5,10 +5,6 @@
   "packageManager": "pnpm@12.10.1",
   "scripts": {
     "build": "pnpm -r run build && cp site/index.html site/dist/",
-    "changeset": "changeset",
     "release": "scripts/publish.sh"
-  },
-  "devDependencies": {
-    "@changesets/cli": "^3.0.3"
   }
 }

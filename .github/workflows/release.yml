@@ -1,14 +1,15 @@
 name: Release
 
-# On main: if there are pending changesets, open/update a "Version Packages" PR.
-# When that PR is merged (no changesets left), publish the bumped packages to npm.
+# release-please reads Conventional Commits on main and keeps one release PR
+# open per package with pending changes. Merging a release PR tags it and
+# creates the GitHub release; the publish step then pushes it to npm.
 on:
   push:
     branches: [main]
 
 permissions:
-  contents: write       # push tags, create GitHub releases
-  pull-requests: write  # open the Version Packages PR
+  contents: write       # tags, GitHub releases
+  pull-requests: write  # release PRs
   id-token: write       # npm trusted publishing (OIDC) + provenance
 
 concurrency:
@@ -19,19 +20,23 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - id: release
+        uses: googleapis/release-please-action@v4
+
+      - if: steps.release.outputs.releases_created == 'true'
+        uses: actions/checkout@v4
+      - if: steps.release.outputs.releases_created == 'true'
+        uses: pnpm/action-setup@v4
+      - if: steps.release.outputs.releases_created == 'true'
+        uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
           cache: pnpm
       # Trusted publishing needs npm >= 11.5.1.
-      - run: npm install -g npm@latest
-      - run: pnpm install --frozen-lockfile
-      - uses: changesets/action@v1
-        with:
-          publish: pnpm release
-          title: Version Packages
-          commit: Version Packages
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - if: steps.release.outputs.releases_created == 'true'
+        run: npm install -g npm@latest
+      - if: steps.release.outputs.releases_created == 'true'
+        run: pnpm install --frozen-lockfile
+      # Publishes every package whose version isn't on npm yet.
+      - if: steps.release.outputs.releases_created == 'true'
+        run: pnpm release

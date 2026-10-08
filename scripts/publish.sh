@@ -13,7 +13,4 @@ for dir in packages/*/; do
   fi
   tgz=$(cd "$dir" && pnpm pack --pack-destination "$out" | tail -1)
   npm publish "$tgz" --access public
-  git tag "$name@$version"
-  # changesets/action reads this line to create a GitHub release.
-  echo "New tag: $name@$version"
 done

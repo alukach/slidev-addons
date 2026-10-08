@@ -56,7 +56,6 @@ Node 24 (`.nvmrc`), pnpm from `packageManager`.
 pnpm install
 pnpm --filter @alukach/slidev-addon-<name> dev   # live preview of one demo
 pnpm build                                        # build all demos into site/dist (CI runs this)
-pnpm changeset                                    # record a release note (required for user-facing changes)
 ```
 
 There is no unit test suite. `pnpm build` is the check: it must pass, and for behavior changes, run `dev` and try the demo in a browser.
@@ -66,15 +65,25 @@ There is no unit test suite. `pnpm build` is the check: it must pass, and for be
 1. Copy the shape of an existing package (e.g. `packages/hotkeys`): `package.json` (update name, description, `files`, `homepage`, build `--base`/`--out` dir), `README.md`, `LICENSE`, `slides.md`, `vite.config.ts`.
 2. Add it to the table in the root `README.md` and to `site/index.html`.
 3. `pnpm install && pnpm build`.
-4. `pnpm changeset` with a `minor` bump for the new package.
-5. After the first publish, a maintainer must configure npm trusted publishing for it (root README → Release → One-time setup).
+4. Add it to `release-please-config.json` (`"packages/<name>": { "component": "slidev-addon-<name>" }`) and `.release-please-manifest.json` (`"packages/<name>": "0.1.0"`).
+5. Commit as `feat(<name>): ...`.
+6. After the first publish, a maintainer must configure npm trusted publishing for it (root README → Release → One-time setup).
 
 ## Changing an addon
 
 - Update its `README.md` whenever props, frontmatter keys, `themeConfig` keys or behavior change.
 - Update its `slides.md` so the demo shows the change.
-- Add a changeset: `patch` for fixes, `minor` for features, `major` for breaking changes to props, frontmatter, layouts or component names.
+- Use a Conventional Commit (see Commits below). A breaking change to props, frontmatter, layouts or component names needs `!` or a `BREAKING CHANGE:` footer.
+
+## Commits
+
+Every commit to `main` (or PR title, when squash-merging) must be a [Conventional Commit](https://www.conventionalcommits.org). release-please derives versions and changelogs from them.
+
+- `fix: ...` → patch release. `feat: ...` → minor release. `feat!: ...` or a `BREAKING CHANGE:` footer → breaking release (minor while below 1.0).
+- `docs:`, `chore:`, `ci:`, `refactor:`, `test:`, `build:` → no release. Don't use these for changes users would notice.
+- Use the package directory as the scope: `feat(tierlist): ...`. release-please assigns a commit to a package by the files it touches, not the scope, so keep each commit to one package where you can.
+- The subject becomes a CHANGELOG line, so write it for addon users.
 
 ## Releasing
 
-Don't bump versions or publish by hand. Changesets + `.github/workflows/release.yml` do it: merging the "Version Packages" PR publishes to npm through trusted publishing (OIDC, no tokens). `scripts/publish.sh` uses `pnpm pack` (which resolves `catalog:`) and `npm publish` (which does OIDC).
+Don't bump versions, edit CHANGELOGs, or publish by hand. release-please (`.github/workflows/release.yml`) opens one release PR per package from the commit history. Merging it tags the release, creates the GitHub release, and publishes to npm through trusted publishing (OIDC, no tokens). `scripts/publish.sh` uses `pnpm pack` (which resolves `catalog:`) and `npm publish` (which does OIDC).
