@@ -1,7 +1,7 @@
 name: Demos
 
-# Builds every addon's demo deck. On PRs this is the CI check; on main it also
-# deploys the decks to GitHub Pages at https://<owner>.github.io/<repo>/<addon>/.
+# Checks repo conventions and builds every addon's demo deck. On PRs this is the
+# CI check; on main it also deploys the decks to GitHub Pages at https://<owner>.github.io/<repo>/<addon>/.
 on:
   push:
     branches: [main]
@@ -26,6 +26,8 @@ jobs:
           node-version-file: .nvmrc
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      # Package naming, "files", release-please registration, docs (scripts/check-packages.mjs).
+      - run: pnpm check
       - run: pnpm build
         env:
           BASE: /${{ github.event.repository.name }}/
