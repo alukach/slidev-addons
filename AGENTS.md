@@ -14,7 +14,7 @@ packages/<name>/
   README.md        # user-facing docs: install, usage, props/frontmatter, demo link
   LICENSE          # copy of the root LICENSE
   slides.md        # demo deck; doubles as the dev preview and the deployed demo
-  vite.config.ts   # demo-only Slidev 53 workaround; NOT in "files"
+  vite.config.ts   # demo-only Slidev 53 workaround; NOT in "files" (see Vite config below)
   components/      # auto-registered Vue components
   layouts/         # new layouts (never override Slidev's built-in ones)
   setup/           # Slidev setup hooks, e.g. setup/shortcuts.ts
@@ -30,6 +30,7 @@ Slidev compiles `.vue` and `.ts` itself, so there is no build step for the addon
 - **`files` is a whitelist.** List only what the addon needs at runtime. The demo deck, `public/` and `vite.config.ts` must stay out of the tarball. Check with `pnpm pack --dry-run` in the package directory.
 - **Addons must not**: add global wildcard styles, override built-in layouts, or override deck configuration (Vite, UnoCSS). Use `scoped` styles. Those things belong in themes, per the Slidev guide.
 - **Packages are independent.** No package may import from another. If addons work well together (tierlist + hotkeys), show it in the demo deck and README, not as a dependency.
+- **Vite config**: Slidev merges every addon's `vite.config.ts` into the user's deck, so normally it's demo-only and excluded from `files`. If an addon needs Vite config at runtime (e.g. `packages/qrcode` pre-bundles a CommonJS dependency), publish it, and put the demo-only workaround behind `process.env.SLIDEV_ADDONS_DEMO`, which that package's `build` script sets.
 - **Shared versions** (Slidev, Vue, esbuild) live in the `catalog:` in `pnpm-workspace.yaml`. Reference them as `"catalog:"` and change versions there.
 - **Configuration from a deck** goes through `themeConfig` in the headmatter (see `packages/laser/laser.ts`) or slide frontmatter (see `packages/hotkeys`), not environment variables or new files.
 - **Paths from `public/`**: user-facing `src` props that accept root-relative paths must prefix `import.meta.env.BASE_URL` so decks deployed under a subpath work (see `withBase` in `packages/live-demo/components/LiveDemo.vue`).
@@ -67,9 +68,9 @@ There is no unit test suite. `pnpm build` is the check: it must pass, and for be
 1. Copy the shape of an existing package (e.g. `packages/hotkeys`): `package.json` (update name, description, `files`, `homepage`, build `--base`/`--out` dir), `README.md`, `LICENSE`, `slides.md`, `vite.config.ts`.
 2. Add it to the table in the root `README.md` and to `site/index.html`.
 3. `pnpm install && pnpm build`.
-4. Add it to `release-please-config.json` (`"packages/<name>": { "component": "slidev-addon-<name>" }`) and `.release-please-manifest.json` (`"packages/<name>": "0.1.0"`).
+4. Set `"version": "0.0.0"` in its `package.json`. Add it to `release-please-config.json` (`"packages/<name>": { "component": "slidev-addon-<name>" }`) and to `.release-please-manifest.json` (`"packages/<name>": "0.0.0"`). The first `feat` commit then produces a 0.1.0 release PR.
 5. Commit as `feat(<name>): ...`.
-6. After the first publish, a maintainer must configure npm trusted publishing for it (root README → Release → One-time setup).
+6. When that release PR merges, CI can't publish the new package yet. A maintainer publishes it by hand and configures npm trusted publishing (root README → Release → One-time setup).
 
 ## Changing an addon
 

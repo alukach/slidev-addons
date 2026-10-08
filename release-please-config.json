@@ -5,9 +5,20 @@
   "bump-minor-pre-major": true,
   "bootstrap-sha": "9513c76",
   "packages": {
-    "packages/tierlist": { "component": "slidev-addon-tierlist" },
-    "packages/live-demo": { "component": "slidev-addon-live-demo" },
-    "packages/hotkeys": { "component": "slidev-addon-hotkeys" },
-    "packages/laser": { "component": "slidev-addon-laser" }
+    "packages/tierlist": {
+      "component": "slidev-addon-tierlist"
+    },
+    "packages/live-demo": {
+      "component": "slidev-addon-live-demo"
+    },
+    "packages/hotkeys": {
+      "component": "slidev-addon-hotkeys"
+    },
+    "packages/laser": {
+      "component": "slidev-addon-laser"
+    },
+    "packages/qrcode": {
+      "component": "slidev-addon-qrcode"
+    }
   }
 }

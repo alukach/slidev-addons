@@ -1,0 +1,40 @@
+{
+  "name": "@alukach/slidev-addon-qrcode",
+  "version": "0.0.0",
+  "description": "A QR code linking to your Slidev deck (or any URL), so the audience can follow along on their phones.",
+  "keywords": [
+    "slidev-addon",
+    "slidev"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alukach/slidev-addons.git",
+    "directory": "packages/qrcode"
+  },
+  "homepage": "https://alukach.github.io/slidev-addons/qrcode/",
+  "type": "module",
+  "files": [
+    "components",
+    "vite.config.ts"
+  ],
+  "engines": {
+    "slidev": ">=53.0.0"
+  },
+  "dependencies": {
+    "qr-code-styling": "^1.9.2"
+  },
+  "scripts": {
+    "dev": "slidev",
+    "build": "SLIDEV_ADDONS_DEMO=1 slidev build --base ${BASE:-/}qrcode/ --out ../../site/dist/qrcode"
+  },
+  "devDependencies": {
+    "@slidev/cli": "catalog:",
+    "@slidev/theme-default": "catalog:",
+    "vue": "catalog:",
+    "esbuild": "catalog:"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -2,5 +2,6 @@
   "packages/tierlist": "0.1.0",
   "packages/live-demo": "0.1.0",
   "packages/hotkeys": "0.1.0",
-  "packages/laser": "0.1.0"
+  "packages/laser": "0.1.0",
+  "packages/qrcode": "0.0.0"
 }
