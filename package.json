@@ -4,6 +4,7 @@
   "type": "module",
   "packageManager": "pnpm@12.10.1",
   "scripts": {
+    "check": "node scripts/check-packages.mjs",
     "build": "pnpm -r run build && cp site/index.html site/dist/",
     "release": "scripts/publish.sh"
   }

@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Instructions for AI coding agents (and humans) working in this repo.
+Code conventions for AI coding agents (and humans) working in this repo. For process (setup, commits, releasing), see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## What this is
 
@@ -51,42 +51,15 @@ Demo decks must also set `routerMode: hash`. They're deployed to GitHub Pages, w
 
 A demo should show every feature in the README, with short on-slide instructions for anything interactive. The demos are the docs' screenshots, CI test, and dev environment in one.
 
-## Commands
+## Process
 
-Node 24 (`.nvmrc`), pnpm from `packageManager`.
+Follow [CONTRIBUTING.md](CONTRIBUTING.md) for setup, commands, commit messages, changing or adding an addon, and releases. In short:
 
-```sh
-pnpm install
-pnpm --filter @alukach/slidev-addon-<name> dev   # live preview of one demo
-pnpm build                                        # build all demos into site/dist (CI runs this)
-```
+- `pnpm build` must pass. There's no unit test suite.
+- Every commit (or squash-merged PR title) is a Conventional Commit, scoped to the package directory: `feat(tierlist): …`. CI rejects PR titles that aren't.
+- Don't bump versions, edit CHANGELOGs, create tags or publish. release-please does that.
+- When adding an addon, do every step in CONTRIBUTING.md → Adding an addon. `pnpm check` (also run in CI) catches a package that's missing from the release-please config, the README table or the site index.
 
-There is no unit test suite. `pnpm build` is the check: it must pass, and for behavior changes, run `dev` and try the demo in a browser.
+### What agents can't do
 
-## Adding an addon
-
-1. Copy the shape of an existing package (e.g. `packages/hotkeys`): `package.json` (update name, description, `files`, `homepage`, build `--base`/`--out` dir), `README.md`, `LICENSE`, `slides.md`, `vite.config.ts`.
-2. Add it to the table in the root `README.md` and to `site/index.html`.
-3. `pnpm install && pnpm build`.
-4. Set `"version": "0.0.0"` in its `package.json`. Add it to `release-please-config.json` (`"packages/<name>": { "component": "slidev-addon-<name>" }`) and to `.release-please-manifest.json` (`"packages/<name>": "0.0.0"`). The first `feat` commit then produces a 0.1.0 release PR.
-5. Commit as `feat(<name>): ...`.
-6. When that release PR merges, CI can't publish the new package yet. A maintainer publishes it by hand and configures npm trusted publishing (root README → Release → One-time setup).
-
-## Changing an addon
-
-- Update its `README.md` whenever props, frontmatter keys, `themeConfig` keys or behavior change.
-- Update its `slides.md` so the demo shows the change.
-- Use a Conventional Commit (see Commits below). A breaking change to props, frontmatter, layouts or component names needs `!` or a `BREAKING CHANGE:` footer.
-
-## Commits
-
-Every commit to `main` (or PR title, when squash-merging) must be a [Conventional Commit](https://www.conventionalcommits.org). release-please derives versions and changelogs from them.
-
-- `fix: ...` → patch release. `feat: ...` → minor release. `feat!: ...` or a `BREAKING CHANGE:` footer → breaking release (minor while below 1.0).
-- `docs:`, `chore:`, `ci:`, `refactor:`, `test:`, `build:` → no release. Don't use these for changes users would notice.
-- Use the package directory as the scope: `feat(tierlist): ...`. release-please assigns a commit to a package by the files it touches, not the scope, so keep each commit to one package where you can.
-- The subject becomes a CHANGELOG line, so write it for addon users.
-
-## Releasing
-
-Don't bump versions, edit CHANGELOGs, or publish by hand. release-please (`.github/workflows/release.yml`) opens one release PR per package from the commit history. Merging it tags the release, creates the GitHub release, and publishes to npm through trusted publishing (OIDC, no tokens). `scripts/publish.sh` uses `pnpm pack` (which resolves `catalog:`) and `npm publish` (which does OIDC).
+Some steps need a human with npm or repository admin access: merging release PRs, the first publish of a new package, and configuring npm trusted publishing. When your change needs one, finish your part, then tell the maintainer exactly which steps remain, linking CONTRIBUTING.md → Maintainers.
