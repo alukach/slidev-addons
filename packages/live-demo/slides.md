@@ -2,6 +2,8 @@
 theme: default
 title: slidev-addon-live-demo
 colorSchema: dark
+# GitHub Pages has no SPA fallback, so /<deck>/3 would 404. Hash URLs (/<deck>/#/3) always load.
+routerMode: hash
 addons:
   - '@/'  # this package; in your deck use '@alukach/slidev-addon-live-demo'
 ---

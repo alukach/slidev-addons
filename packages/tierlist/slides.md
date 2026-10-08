@@ -2,6 +2,8 @@
 theme: default
 title: slidev-addon-tierlist
 colorSchema: dark
+# GitHub Pages has no SPA fallback, so /<deck>/3 would 404. Hash URLs (/<deck>/#/3) always load.
+routerMode: hash
 transition: fade
 addons:
   - '@/'              # this package; in your deck use '@alukach/slidev-addon-tierlist'

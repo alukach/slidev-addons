@@ -46,6 +46,8 @@ addons:
 
 and sibling addons with `'@/../<dir>'`. In comments and docs, always show users the npm name instead.
 
+Demo decks must also set `routerMode: hash`. They're deployed to GitHub Pages, which has no SPA fallback, so history-mode deep links like `/tierlist/3` would 404.
+
 A demo should show every feature in the README, with short on-slide instructions for anything interactive. The demos are the docs' screenshots, CI test, and dev environment in one.
 
 ## Commands
