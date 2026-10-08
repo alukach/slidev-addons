@@ -21,14 +21,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: release
-        uses: googleapis/release-please-action@v4
+        uses: googleapis/release-please-action@v5
 
       - if: steps.release.outputs.releases_created == 'true'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - if: steps.release.outputs.releases_created == 'true'
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
       - if: steps.release.outputs.releases_created == 'true'
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: .nvmrc
           cache: pnpm
