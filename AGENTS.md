@@ -56,6 +56,7 @@ A demo should show every feature in the README, with short on-slide instructions
 Follow [CONTRIBUTING.md](CONTRIBUTING.md) for setup, commands, commit messages, changing or adding an addon, and releases. In short:
 
 - `pnpm build` must pass. There's no unit test suite.
+- `main` rejects direct pushes. Work on a branch, open a PR, and wait for its checks (`build`, `conventional-commit`) to pass.
 - Every commit (or squash-merged PR title) is a Conventional Commit, scoped to the package directory: `feat(tierlist): …`. CI rejects PR titles that aren't.
 - Don't bump versions, edit CHANGELOGs, create tags or publish. release-please does that.
 - When adding an addon, do every step in CONTRIBUTING.md → Adding an addon. `pnpm check` (also run in CI) catches a package that's missing from the release-please config, the README table or the site index.
