@@ -12,3 +12,7 @@ catalog:
 # markdown-it 15 no longer exports. Drop when Slidev fixes it.
 overrides:
   markdown-it: ^14.1.0
+
+# Dependencies allowed to run install scripts (pnpm blocks all others).
+allowBuilds:
+  esbuild: true
