@@ -24,7 +24,7 @@ There's no unit test suite. `pnpm check` and `pnpm build` must pass; CI runs bot
 
 Every commit that lands on `main` must be a [Conventional Commit](https://www.conventionalcommits.org). [release-please](https://github.com/googleapis/release-please) derives versions and changelogs from these commits.
 
-PRs are squash-merged, and the PR title becomes the commit message. The **PR title** check rejects titles that aren't Conventional Commits. Commits inside a PR can be anything.
+`main` only accepts changes through PRs. A [ruleset](https://github.com/alukach/slidev-addons/rules) blocks direct pushes and requires the **build** and **PR title** checks to pass. PRs are squash-merged, and the PR title becomes the commit message. The **PR title** check rejects titles that aren't Conventional Commits. Commits inside a PR can be anything.
 
 | Prefix | Release |
 | --- | --- |
@@ -66,7 +66,7 @@ Don't bump versions, edit CHANGELOGs, or create tags by hand.
 2. The [Release workflow](.github/workflows/release.yml) opens or updates one release PR per package with releasable changes, titled e.g. `chore(main): release slidev-addon-tierlist 0.2.0`.
 3. A maintainer merges it. The workflow then tags it (`slidev-addon-tierlist-v0.2.0`), creates the GitHub release, and runs `pnpm release` ([`scripts/publish.sh`](scripts/publish.sh)). That publishes every package whose version isn't on npm yet, using npm trusted publishing: no token, with provenance.
 
-Release PRs are opened by a bot, so their Demos check shows **action required** until someone approves the run. Approving is optional; `main` builds the demos either way.
+Release PRs are opened by a bot, so GitHub holds their checks (**action required**) until a maintainer approves the workflow runs. The checks are required, so approve them, wait for them to pass, then merge.
 
 ## CI
 
@@ -116,6 +116,11 @@ Already done for `alukach/slidev-addons`; needed again for a fork or a new repo.
 - **Settings → Pages → Source**: GitHub Actions.
 - **Settings → Actions → General**: enable **Allow GitHub Actions to create and approve pull requests**, so release-please can open release PRs.
 - **Settings → General → Pull Requests**: allow squash merging only, with the default commit message set to **Pull request title**, so the checked PR title is what lands on `main`. Enable **Automatically delete head branches**.
+- **Settings → Rules → Rulesets**: a `main` ruleset targeting the default branch.
+  - **Require a pull request before merging**: 0 approvals, squash merge only.
+  - **Require status checks to pass**: `build` and `conventional-commit`, both from GitHub Actions.
+  - **Block force pushes** and **Restrict deletions**.
+  - **Bypass list**: Repository admin, "For pull requests only". That's an escape hatch for merging a PR whose checks are stuck; it never allows direct pushes.
 
 ### Troubleshooting
 
@@ -126,4 +131,6 @@ Already done for `alukach/slidev-addons`; needed again for a fork or a new repo.
 | Release PR proposes 1.0.0 for a new package | `initial-version` is missing from `release-please-config.json`. |
 | No release PR after a commit | The commit type doesn't release (`docs:`, `chore:`…), the message isn't a Conventional Commit, or the commit didn't touch the package's directory. |
 | `Cannot find module …/pnpm/12.x/bin/pnpm.cjs` | corepack is too old. See [Setup](#setup). |
+| Push to `main` rejected: `Changes must be made through a pull request` | Working as intended. Push a branch and open a PR. |
+| Release PR can't be merged: checks never start | Approve the workflow runs on the PR (bot-opened PRs need approval), then merge once they pass. |
 | `pnpm check` fails | The message names the file and the fix. Most often it's a new package missing from the release-please config, the README table or `site/index.html`. |
