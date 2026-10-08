@@ -4,6 +4,7 @@
 # (OIDC, no token) and adds provenance automatically when run from GitHub Actions.
 set -euo pipefail
 out=$(mktemp -d)
+failed=()
 for dir in packages/*/; do
   name=$(node -p "require('./${dir}package.json').name")
   version=$(node -p "require('./${dir}package.json').version")
@@ -12,5 +13,10 @@ for dir in packages/*/; do
     continue
   fi
   tgz=$(cd "$dir" && pnpm pack --pack-destination "$out" | tail -1)
-  npm publish "$tgz" --access public
+  # Keep going if one package fails (e.g. a new package with no trusted publisher yet).
+  npm publish "$tgz" --access public || failed+=("$name@$version")
 done
+if [ ${#failed[@]} -gt 0 ]; then
+  echo "Failed to publish: ${failed[*]}" >&2
+  exit 1
+fi
