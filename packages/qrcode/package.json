@@ -1,6 +1,6 @@
 {
   "name": "@alukach/slidev-addon-qrcode",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A QR code linking to your Slidev deck (or any URL), so the audience can follow along on their phones.",
   "keywords": [
     "slidev-addon",
