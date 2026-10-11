@@ -18,13 +18,10 @@ const COLORS: Record<string, string> = {
 const group = "tiers";
 const open = (id: string) => go(id);
 
-// Drawer: opens on hover, while a drag is in progress, or when pinned.
+// Drawer: opens on hover (including dragging a chip over it), or when pinned.
 const pinned = ref(false);
 const hovering = ref(false);
-const dragging = ref(false);
-const drawerOpen = computed(
-  () => pinned.value || hovering.value || dragging.value,
-);
+const drawerOpen = computed(() => pinned.value || hovering.value);
 
 // v-fit: shrink a tier row's chips (via the --s CSS variable) until they fit.
 // Re-runs when the row resizes or its chips change (drop, reorder, visited).
@@ -63,15 +60,6 @@ const vFit = {
     el._fit?.mo.disconnect();
   },
 };
-
-const dragHandlers = {
-  onStart: () => {
-    dragging.value = true;
-  },
-  onEnd: () => {
-    dragging.value = false;
-  },
-};
 </script>
 
 <template>
@@ -87,7 +75,6 @@ const dragHandlers = {
           class="drop"
           ghost-class="ghost"
           :animation="150"
-          v-bind="dragHandlers"
         >
           <template #item="{ element }">
             <button
@@ -132,7 +119,6 @@ const dragHandlers = {
           class="pool"
           ghost-class="ghost"
           :animation="150"
-          v-bind="dragHandlers"
         >
           <template #item="{ element }">
             <button
