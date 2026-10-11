@@ -1,6 +1,6 @@
 {
   "name": "@alukach/slidev-addon-tierlist",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A drag-and-drop S–F tier list for Slidev, linking to detail slides with tier badges.",
   "keywords": [
     "slidev-addon",
