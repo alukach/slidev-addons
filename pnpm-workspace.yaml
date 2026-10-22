@@ -5,7 +5,7 @@ packages:
 catalog:
   '@slidev/cli': ^53.0.0
   '@slidev/theme-default': ^0.25.0
-  vue: ^3.5.0
+  vue: ^3.5.44
   esbuild: ^0.28.2   # used by the cssMinify workaround in each vite.config.ts
 
 # Slidev 53 imports markdown-it/lib/token.mjs (via @comark/markdown-it), which
