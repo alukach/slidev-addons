@@ -3,9 +3,9 @@ packages:
 
 # One Slidev version for every addon's demo deck. Reference with "catalog:".
 catalog:
-  '@slidev/cli': ^53.0.0
+  '@slidev/cli': ^53.1.0
   '@slidev/theme-default': ^0.25.0
-  vue: ^3.5.0
+  vue: ^3.5.45
   esbuild: ^0.28.2   # used by the cssMinify workaround in each vite.config.ts
 
 # Slidev 53 imports markdown-it/lib/token.mjs (via @comark/markdown-it), which
